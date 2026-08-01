@@ -16,4 +16,8 @@ public class UserController {
     public User createUser(@RequestBody User user) {
         return userService.saveUser(user);
     }
+    @GetMapping("/user/profile")
+    public String userProfile() {
+        return "Welcome User!";
+    }
 }

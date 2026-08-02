@@ -1,4 +1,5 @@
 package com.anisha.codearena.service;
+import com.anisha.codearena.jwt.JwtService;
 
 import com.anisha.codearena.entity.User;
 import com.anisha.codearena.repository.UserRepository;
@@ -14,6 +15,9 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtService jwtService;
 
     public User saveUser(User user) {
 
@@ -33,7 +37,9 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (passwordEncoder.matches(password, user.getPassword())) {
-            return "Login Successful";
+
+            return jwtService.generateToken(user.getEmail());
+
         } else {
             throw new RuntimeException("Invalid Password");
         }

@@ -6,9 +6,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RoleController {
 
-    @GetMapping("/user/profile")
-    public String userProfile() {
-        return "Welcome User!";
+    @GetMapping("/roles")
+    public String roles() {
+        return "Roles API";
     }
 
+
 }
+

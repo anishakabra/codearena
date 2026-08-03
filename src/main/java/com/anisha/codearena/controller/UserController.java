@@ -1,23 +1,24 @@
 package com.anisha.codearena.controller;
 
-import com.anisha.codearena.entity.User;
-import com.anisha.codearena.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
-
-    @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.saveUser(user);
-    }
     @GetMapping("/user/profile")
-    public String userProfile() {
-        return "Welcome User!";
+    public Map<String, Object> profile(Authentication authentication) {
+
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("email", authentication.getName());
+
+        response.put("message", "Welcome to CodeArena!");
+
+        return response;
     }
 }

@@ -1,5 +1,7 @@
 package com.anisha.codearena.config;
-
+import com.anisha.codearena.security.JwtAuthFilter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import com.anisha.codearena.security.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -11,12 +13,17 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import com.anisha.codearena.security.JwtAuthFilter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig {
 
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
+    @Autowired
+    private JwtAuthFilter jwtAuthFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -37,10 +44,15 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable())
+
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+
                 .authorizeHttpRequests(auth -> auth
 
                         .requestMatchers("/users/register").permitAll()
-                        .requestMatchers("/users/login").permitAll()
+                        .requestMatchers("/auth/login").permitAll()
 
                         .requestMatchers("/admin/**").hasRole("ADMIN")
 
@@ -48,9 +60,11 @@ public class SecurityConfig {
 
                         .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults());
 
-        System.out.println("SecurityFilterChain Loaded");
+                .authenticationProvider(authenticationProvider())
+
+                .addFilterBefore(jwtAuthFilter,
+                        UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

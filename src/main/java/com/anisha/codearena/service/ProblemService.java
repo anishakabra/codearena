@@ -20,4 +20,8 @@ public class ProblemService {
     public List<Problem> getAllProblems() {
         return problemRepository.findAll();
     }
+    public Problem getProblemById(Long id) {
+        return problemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Problem not found"));
+    }
 }

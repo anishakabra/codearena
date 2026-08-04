@@ -1,4 +1,5 @@
 package com.anisha.codearena.config;
+import org.springframework.web.client.RestTemplate;
 import com.anisha.codearena.security.JwtAuthFilter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -24,6 +25,10 @@ public class SecurityConfig {
     private CustomUserDetailsService customUserDetailsService;
     @Autowired
     private JwtAuthFilter jwtAuthFilter;
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

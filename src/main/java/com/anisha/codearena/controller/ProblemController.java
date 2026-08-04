@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/problems")
+@RequestMapping("/admin/problems")
 public class ProblemController {
 
     @Autowired
@@ -23,4 +23,9 @@ public class ProblemController {
     public List<Problem> getAllProblems() {
         return problemService.getAllProblems();
     }
+    @GetMapping("/{id}")
+    public Problem getProblemById(@PathVariable Long id) {
+        return problemService.getProblemById(id);
+    }
+
 }
